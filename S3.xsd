@@ -1,0 +1,32 @@
+<!-- forecast contain attribute qTime & qLocation -->
+<!-- forecast contain element weather -->
+<!-- weather contain attribute yyyymmdd -->
+<!-- weather contain element year, month, date, comment, code, highest, lowest -->
+
+
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:element name="forecast">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="weather" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="year" type="xsd:integer" />
+							<xsd:element name="month" type="xsd:integer" />
+							<xsd:element name="date" type="xsd:integer" />
+							<xsd:element name="comment" type="xsd:string" />
+							<xsd:element name="code" type="xsd:string" />
+							<xsd:element name="highest" type="xsd:decimal" />
+							<xsd:element name="lowest" type="xsd:decimal" />
+						</xsd:sequence>
+						<xsd:attribute name="yyyymmdd" type="xsd:integer" />
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="qTime" type="xsd:string" />
+			<xsd:attribute name="qLocation" type="xsd:string" />
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
+	

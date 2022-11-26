@@ -1,0 +1,492 @@
+<html>
+	<head>
+		<title>A3-T07-Sally and Goh Wee Shen</title>
+		
+		<style>
+			.form-input
+			{
+				width: 310px;
+				height: 35px;
+			}
+			.part1-table
+			{
+				border-spacing: 1;
+			}
+			.part1-table th
+			{
+				background-color: #DEEAF6;
+				font-family: Tahoma;
+			}
+			.part1-table th, .part1-table td
+			{
+				border: 1px solid black;
+				padding: 10px;
+				font-family: Tahoma;
+			}
+			.part1-table, .part2-table, .part3-table
+			{
+				width: 930px;
+				border:1px solid black;
+				border-spacing: 1;
+			}
+			.part2-table th
+			{
+				vertical-align: middle;
+				text-align: center;
+				width: 310px;
+				font-family: Tahoma;
+			}
+			.part2-table td
+			{
+				border:1px solid black;
+				border-spacing: 1;
+				padding: 10px;
+				text-align:left;
+				width: 310px;
+				height: 50px;
+				background-color: #DEEAF6;
+				font-family: Tahoma;
+			}
+			.allbutton
+			{
+				height: 35px;
+				width: 200px;
+				background-color: white;
+				font-family: Tahoma;
+			}		
+			.alllabel
+			{
+				font-size: 30px;
+				font-weight: bold;
+				font-family: Tahoma;
+			}
+			#nameError, #targetError
+			{
+				color: red;
+				font-style: italic;
+				padding: 10px;
+				font-family: Tahoma;
+			}
+			#gameTime, #gameScore, #redlabel
+			{
+				color: red;
+				font-family: Tahoma;
+			}
+			#guess1
+			{
+				color: blue;
+				font-weight: bold;
+				font-size: 25px;
+				font-family: Tahoma;
+			}
+			#guess2
+			{
+				color: #C55911;
+				font-weight: bold;
+				font-size: 25px;
+				font-family: Tahoma;
+			}
+			#guess3
+			{
+				color: #FF4EFF;
+				font-weight: bold;
+				font-size: 25px;
+				font-family: Tahoma;
+			}
+			#startGame, #endGame
+			{
+				background-color:#99FF99;
+				font-family: Tahoma;
+			}
+		</style>
+		
+		<script>
+			var target;
+			var playerName;
+			var randomOptions = [];
+			var randomThree = [];
+			var random;
+			var gameTime;
+			var gameScore;
+			var singleRound;
+			var setTimer;
+			var resultChecked = false;
+			var playerNames = [];
+			
+			/* To check the name input and ensure it's not empty using if-else statement*/
+			function ValidateName()
+			{
+				/* get name input first */
+				playerName = document.getElementById("part2name").value.trim();
+				
+				/* get target input*/
+				target = document.getElementById("target").value;
+				
+				/* create a validation flag  */
+				var valid = false;
+				
+				if (playerName == null || playerName == "") 
+				{
+					document.getElementById("nameError").innerHTML = "Player name cannot be empty";
+				}
+				else if (/^\d*$/.test(playerName) == true)
+				{	
+					document.getElementById("nameError").innerHTML = "No digit is allowed";
+				}
+				
+				/* use includes() to check for array item's uniqueness*/
+				else if (playerNames.includes(playerName))
+				{
+					document.getElementById("nameError").innerHTML = "Player name already exists";
+				}
+				else if (target=="NA")
+				{
+					document.getElementById("targetError").innerHTML = "Target must be selected";
+				}
+				else
+				{
+					document.getElementById("nameError").innerHTML = "";
+					document.getElementById("targetError").innerHTML = "";
+					valid = true;
+				}
+
+				return valid;
+			}
+			
+			/* to add name input into a list*/
+			function AddName() 
+			{	
+				var players = "";
+				
+				for (pName of playerNames)
+				{
+					players += ("<li>" + pName + "</li>");
+				}
+				
+				/* add the name input <li> to <ul> */
+				document.getElementById("playerList").innerHTML = players;
+				
+			}
+			
+			function StartGame()
+			{
+				/* reset game score and time on start new game */
+				gameTime = 0;
+				gameScore = 0;
+				document.getElementById("gameScore").innerHTML = gameScore;
+				
+				
+				if (!ValidateName()) // if ValidateName() is true, then line 168 won't run
+				{
+					return false;
+				}
+				
+				
+				/* add player name into playerNames list*/
+				playerNames.push(playerName);
+				
+				/* extract value of radio button*/
+				var levels = document.getElementsByName("levelType");
+				
+				for (l of levels) 
+
+				{
+					if(l.checked) 
+					{
+						timing = l.value;
+					}
+					
+				}
+				
+				/* to check the timing selected*/
+				console.log(timing);
+				
+				RandomTen();
+				ResetOptions();
+				SetTimer();
+				AddName();
+				
+				document.getElementById("startGame").disabled = true;
+			}
+			
+			function CheckResult(elem)
+			{
+				var currentScore = 0;
+				
+				/* disable the option buttons so each time can only click an option one time*/
+				document.getElementById("guess1").disabled = true;
+				document.getElementById("guess2").disabled = true;
+				document.getElementById("guess3").disabled = true;
+				
+				
+				/* get the chosen option; update score */
+				currentScore = parseInt(elem.value);
+				
+				/* isNaN to make sure it's a number then add to gamescore */
+				gameScore += isNaN(currentScore) ? 0 : currentScore;
+				document.getElementById("gameScore").innerHTML = gameScore;
+			}
+			
+			function EndGame()
+			{
+				clearInterval(singleRound);
+				clearInterval(setTimer);
+				document.getElementById("guess1").disabled = true;
+				document.getElementById("guess2").disabled = true;
+				document.getElementById("guess3").disabled = true;
+				document.getElementById("startGame").disabled = false;
+			}
+				
+			function RandomTen()
+			{
+				randomOptions = [];
+				numberLen = 5;
+				totalLen = 10;
+				
+				if(isNaN(parseInt(target))) // if integer, isNaN returns false
+				{
+					/* is a character */
+					numberLen += 1;
+					randomOptions[0] = target; // set target to be one of the randomOptions
+				}
+				else
+				{
+					/* is a integer */
+					randomOptions[0] = parseInt(target);
+				}
+				
+				/* to get the other 4 or 5 integers */
+				while(randomOptions.length < numberLen)
+				{
+					random = Math.floor(Math.random() * 9) + 1 // 0-9
+					/* to check for repeated values, if -1 means value not in randomOptions [] */
+					if (randomOptions.indexOf(random) === -1)
+						randomOptions.push(random);
+				}
+				
+				var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+				var character;
+				
+				/* to get the alphabets */
+				while(randomOptions.length < totalLen)
+				{
+					random = Math.floor(Math.random() * 25) + 1; // A-Z, return 1-25
+					character = characters.charAt(random);
+					if(randomOptions.indexOf(character) === -1)
+						randomOptions.push(character);
+				}
+				
+				/* to check the random numbers generated are unique */
+				console.log("All options: " + JSON.stringify(randomOptions));
+			}
+			
+			function RandomThree()
+			{
+				/* reset array to empty */
+				randomThree = [];
+				
+				/* set index 0 as our selected target*/
+				randomThree[0] = target;
+				
+				/* loop < 3 because target is already in randomThree */
+				while(randomThree.length < 3)
+				{
+					random = Math.floor(Math.random() * 9) + 1;
+					/* randomly choose the other 2 options from randomOptions & add into randomThree*/
+					var chosen = randomOptions[random];
+					if(randomThree.indexOf(chosen) === -1)
+						randomThree.push(chosen);
+				}
+				
+				/* shuffle elements in randomThree */
+				randomThree = randomThree.sort(() => Math.random() - 0.5);
+				
+				/* set value of button to 2 when target is selected 
+					set value of button to -1 when target is not selected */
+				document.getElementById("guess1").value = randomThree[0] == target ? 2 : -1 ;
+				document.getElementById("guess1").innerHTML = randomThree[0];
+				
+				document.getElementById("guess2").value = randomThree[1] == target ? 2 : -1 ;
+				document.getElementById("guess2").innerHTML = randomThree[1];
+				
+				document.getElementById("guess3").value = randomThree[2] == target ? 2 : -1 ;
+				document.getElementById("guess3").innerHTML = randomThree[2];
+				
+			}
+			
+			/* to be used when calling setInterval() in ResetOptions()*/
+			function GenerateRandomThree()
+			{
+					RandomThree();
+					
+					/* enable the option buttons */
+					document.getElementById("guess1").disabled = false;
+					document.getElementById("guess2").disabled = false;
+					document.getElementById("guess3").disabled = false;
+					
+			}
+			
+			function ResetOptions()
+			{
+				RandomThree();
+				
+				/* built-in function to clear the time interval
+					otherwise, there will be overlap of setInterval() whenever end game*/
+				clearInterval(singleRound);
+				
+				/* call a function at specified intervals using setInterval() */
+				singleRound = setInterval(GenerateRandomThree, timing * 1000); /* convert to second */
+			}
+			
+			function SetTimer()
+			{
+				seconds = 0;
+				
+				setTimer = setInterval(function()
+				{
+					document.getElementById('gameTime').innerHTML = seconds++;
+				}, 1000); /* convert to second */
+			}
+		</script>
+			
+	</head>
+	
+	<body>
+		<!-- Part 1 -->
+		<table class= "part1-table" >
+			<tr>
+				<th colspan="3" >CSIT128: Assignment 3</th>
+				<th>Tutorial Group 7</th>
+			</tr>
+			
+			<tr>
+				<td rowspan="3">Student Number / <br />
+								Name / Email</td>
+				<td>4603229</td>
+				<td>Sally Yeo</td>
+				<td> s069@mymail.sim.edu.sg</td>
+			</tr>
+			<tr>
+				<td>6747747</td>
+				<td>Goh wee shen</td>
+				<td>wswwgoh001@mymail.sim.edu.sg</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+		<br/>
+		
+		<!-- Part 2 -->
+		<table class= "part2-table" >
+			
+			<!-- 1st Row -->
+			<tr>
+				<th colspan="3" style="background-color:#F7CAAC; font-size:32px;">Assignment 3 Part 2: Game</th>
+			</tr>
+				
+			<!-- 2nd Row -->
+			<tr>
+				<td><b>Player Name</b></td>
+				<td>
+					<input type="text" id="part2name" class="form-input" onkeyup="return ValidateName()" />
+					<span id="nameError"></span>
+				</td>
+				
+				<td rowspan="3" style="text-align: center; background-color: #FFF2CC;">
+					<label id="timecount" class="alllabel" >Time: <span id="gameTime" >0</span><label id="redlabel"> seconds</label></label>
+					<br/><br/>
+					<label id="scorecount" class="alllabel" >Score: <span id="gameScore" >0</span><label id="redlabel"> points</label></label>
+				</td>	
+			</tr>
+				
+			<!-- 3rd Row -->
+			<tr>
+				<td><b>The target option:</b></td>
+				<td><select name="target" id="target" style="width:310px; height: 35px;" >
+						<option value="NA">Choose one target</option>
+						<option value="A">A</option>
+						<option value="B">B</option>
+						<option value="C">C</option>
+						<option value="D">D</option>
+						<option value="E">E</option>
+						<option value="F">F</option>
+						<option value="G">G</option>
+						<option value="H">H</option>
+						<option value="I">I</option>
+						<option value="J">J</option>
+						<option value="K">K</option>
+						<option value="L">L</option>
+						<option value="M">M</option>
+						<option value="N">N</option>
+						<option value="O">O</option>						
+						<option value="P">P</option>
+						<option value="Q">Q</option>
+						<option value="R">R</option>
+						<option value="S">S</option>
+						<option value="T">T</option>
+						<option value="U">U</option>
+						<option value="V">V</option>						
+						<option value="W">W</option>
+						<option value="X">X</option>
+						<option value="Y">Y</option>
+						<option value="Z">Z</option>
+						<option value="0">0</option>
+						<option value="1">1</option>
+						<option value="2">2</option>						
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+					</select>
+					<br>
+					<span id="targetError"></span>
+				</td>
+			</tr>
+				
+			<!-- 4th Row -->
+			<tr>
+				<td><b>The difficulty level</b></td>
+				<td style="text-align: center;">
+					<input type="radio" name="levelType" id="levelType" value="3" checked>Low						
+					<input type="radio" name="levelType" id="levelType" value="2">Medium
+					<input type="radio" name="levelType" id="levelType" value="1">High	
+				</td>
+			</tr>
+				
+			<!-- 5th Row -->
+			<tr>
+				<td colspan="3" style="text-align: center; background-color:#99FF99;">
+					<button id="startGame" class="allbutton" value="startGame" onclick="StartGame();" >Start Game</button>
+					<button id="endGame" class="allbutton" value="endGame" onclick="EndGame();" style="margin-left: 200px;">End Game</button>
+				</td>
+			</tr>
+			
+			<!-- 6th Row -->
+			<tr>
+				<td style="text-align: center; background-color: white;" > 
+					<button id="guess1" class="allbutton" onclick="CheckResult(this);" >1st Option</button>
+				</td>
+				<td style="text-align: center; background-color: white;" >
+					<button id="guess2" class="allbutton" onclick="CheckResult(this);" >2nd Option</button>
+				</td>
+				<td style="text-align: center; background-color: white;" >
+					<button id="guess3" class="allbutton" onclick="CheckResult(this);" >3rd Option</button>
+				</td>
+			</tr>
+					
+			<!-- 7th Row -->
+			<tr>
+				<td colspan="3" style="background-color: #FBE4D5" ><b>Player listing:</b>
+					<ul id="playerList">
+					</ul>
+				</td>
+			</tr>
+		</table>
+	
+</html>

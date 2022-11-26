@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="S3.xsl"?>
+<forecast qTime="28/10/20 10:00 PM" qLocation="Singapore"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="S3.xsd">
+  <weather yyyymmdd="20200430" >
+    <year>2020</year>	
+    <month>04</month>
+    <date>30</date>
+    <comment>Plenty of sunshine</comment>
+    <code>sunny</code>
+    <highest>32.6</highest>
+    <lowest>28.4</lowest>
+  </weather>
+  <weather yyyymmdd="20200218" >
+    <year>2020</year>	
+    <month>02</month>
+    <date>18</date>
+    <comment>Plenty of sunshine</comment>
+    <code>sunny</code>
+    <highest>34.6</highest>
+    <lowest>30.5</lowest>
+  </weather>
+  <weather yyyymmdd="20200710" >
+    <year>2020</year>	
+    <month>07</month>
+    <date>10</date>
+    <comment>Partly sunny</comment>
+    <code>partlySunny</code>
+    <highest>33.1</highest>
+    <lowest>29.2</lowest>
+  </weather>
+  <weather yyyymmdd="20200616" >
+    <year>2020</year>	
+    <month>06</month>
+    <date>16</date>
+    <comment>Considerable clouds</comment>
+    <code>cloudy</code>
+    <highest>30.5</highest>
+    <lowest>25.4</lowest>
+  </weather>
+  <weather yyyymmdd="20200612" >
+    <year>2020</year>	
+    <month>06</month>
+    <date>12</date>
+    <comment>Cloudy with a thunderstorm</comment>
+    <code>thunderstorm</code>
+    <highest>29.1</highest>
+    <lowest>23.2</lowest>
+  </weather>
+  <weather yyyymmdd="20200421" >
+    <year>2020</year>	
+    <month>04</month>
+    <date>21</date>
+    <comment>Plenty of sunshine</comment>
+    <code>sunny</code>
+    <highest>32.2</highest>
+    <lowest>29.8</lowest>
+  </weather>
+  <weather yyyymmdd="20200628" >
+    <year>2020</year>	
+    <month>06</month>
+    <date>28</date>
+    <comment>A morning shower, then rain</comment>
+    <code>rain</code>
+    <highest>30.2</highest>
+    <lowest>22.7</lowest>
+  </weather>
+  <weather yyyymmdd="20200502" >
+    <year>2020</year>	
+    <month>05</month>
+    <date>02</date>
+    <comment>Cloudy with a thunderstorm</comment>
+    <code>thunderstorm</code>
+    <highest>28.1</highest>
+    <lowest>26.9</lowest>
+  </weather>
+  <weather yyyymmdd="20200428" >
+    <year>2020</year>	
+    <month>04</month>
+    <date>28</date>
+    <comment>A morning shower</comment>
+    <code>rain</code>
+    <highest>28.8</highest>
+    <lowest>22.2</lowest>
+  </weather>
+  <weather yyyymmdd="20200410" >
+    <year>2020</year>	
+    <month>04</month>
+    <date>10</date>
+    <comment>Partly sunny</comment>
+    <code>partlySunny</code>
+    <highest>33.7</highest>
+    <lowest>29.3</lowest>
+  </weather>
+  <weather yyyymmdd="20200730" >
+    <year>2020</year>	
+    <month>07</month>
+    <date>30</date>
+    <comment>Plenty of sunshine</comment>
+    <code>sunny</code>
+    <highest>32.3</highest>
+    <lowest>28.4</lowest>
+  </weather>
+  <weather yyyymmdd="20200706" >
+    <year>2020</year>	
+    <month>07</month>
+    <date>06</date>
+    <comment>Plenty of sunshine</comment>
+    <code>sunny</code>
+    <highest>34.5</highest>
+    <lowest>30.6</lowest>
+  </weather>
+</forecast>
